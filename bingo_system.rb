@@ -1,0 +1,3 @@
+require "./bingo_card"
+
+

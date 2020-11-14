@@ -45,7 +45,8 @@ puts "~~~~~~~~~~~~~~~~~"
 
 check_continue = 1
 already_numbers = []
-
+# test
+numbers = (1..75).to_a.shuffle
 
 until check_continue == 0
   
@@ -56,12 +57,21 @@ until check_continue == 0
     card.split(/[|]/)
   end
 
-selected_number = [*1..75].sample.to_s.rjust(2)
-  already_numbers << selected_number
-  puts "#{selected_number}が出ました"
-  puts "いままで出た数字<<<#{already_numbers}"
-  puts "#{already_numbers.size}回目の挑戦"
-  puts "~~~~~~~~~~~~~~~~~~~~~~~"
+# test
+p select_number = numbers.shift(1)
+p selected_number = select_number.sample.to_s.rjust(2)
+already_numbers << selected_number
+puts "いままで出た数字<<<#{already_numbers}"
+puts "#{already_numbers.size}回目の挑戦"
+puts "~~~~~~~~~~~~~~~~~~~~~~~"
+
+
+# selected_number = [*1..75].sample.to_s.rjust(2)
+#   already_numbers << selected_number
+#   puts "#{selected_number}が出ました"
+#   puts "いままで出た数字<<<#{already_numbers}"
+#   puts "#{already_numbers.size}回目の挑戦"
+#   puts "~~~~~~~~~~~~~~~~~~~~~~~"
 
 
 
@@ -126,6 +136,7 @@ puts "横確認"
     p check_column.size
   end
 
+  # BINGO 確認メッセージ
   if lines.include?([]) || columns.include?([])
     puts "B I N G O!!!!"
     check_continue = 0

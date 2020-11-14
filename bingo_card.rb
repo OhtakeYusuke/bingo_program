@@ -8,12 +8,32 @@ o = (61..75).to_a.shuffle.take(5)
 lines = [b, i, n, g, o]
 columns = lines.transpose
 columns[2][2] = nil
+lines[2][2] = nil
 
 pre_cards = columns.map do |pre_card|
   pre_card.map do |number|
     number.to_s.rjust(2)
   end
 end
+
+
+# 縦と横の中央の穴あけ
+lines = lines.map do |pre_line|
+  pre_line.map do |number|
+    number.to_s.rjust(2)
+  end
+end
+lines[2][2] = nil
+
+columns = columns.map do |pre_column|
+  pre_column.map do |number|
+    number.to_s.rjust(2)
+  end
+end
+columns[2][2] = nil
+
+
+
 
 cards = pre_cards.map! do |card|
   card.join("|")
@@ -29,19 +49,22 @@ already_numbers = []
 
 until check_continue == 0
   
+  
 
   # 新しいカード作成
   edit_card = cards.map! do |card|
     card.split(/[|]/)
   end
 
-
-  selected_number = rand(1..75).to_s.rjust(2)
+selected_number = [*1..75].sample.to_s.rjust(2)
   already_numbers << selected_number
   puts "#{selected_number}が出ました"
   puts "いままで出た数字<<<#{already_numbers}"
   puts "#{already_numbers.size}回目の挑戦"
   puts "~~~~~~~~~~~~~~~~~~~~~~~"
+
+
+
   # カードチェック
   edit_card.map do |check_line|
     check_line.map! do |number|
@@ -54,26 +77,30 @@ until check_continue == 0
   end
   
   # 縦列チェック
-  # lines.map do |edit_line|
-  #   edit_line.map! do |number|
-  #     if number == selected_number
-  #       number = "  "
-  #     else
-  #       number
-  #     end
-  #   end
-  # end
+  lines = lines.map do |edit_line|
+    edit_line.map! do |number|
+      if number == selected_number
+        number = nil
+        puts "#{selected_number}が当たりました"
+      else
+        number
+      end
+    end
+  end
+  
+  
   
   # 横列チェック
-  # columns.map do |edit_columns|
-  #   edit_columns.map! do |number|
-  #     if number == selected_number
-  #       number = "  "
-  #     else
-  #       number
-  #     end
-  #   end
-  # end
+  columns = columns.map do |edit_columns|
+    edit_columns.map! do |number|
+      if number == selected_number
+        number = nil
+        puts "#{selected_number}が当たりました"
+      else
+        number
+      end
+    end
+  end
   
   # カード編成
   cards = edit_card.map! do |card|
@@ -85,33 +112,29 @@ until check_continue == 0
   
   
   # BINGO 確認
+
+puts "縦確認"
+
+  lines.each do |check_line|
+    check_line.compact!
+    if check_line.empty?
+      puts "B I N G O !!!!!"
+      check_continue = 0
+    else
+      p check_line.size
+    end
+  end
   
-  # finish_confirm_lines = false
-  # finish_confirm_columns = false
-  
-  
-  # lines.map! do |check_line|
-  #   check_line.compact!
-  #   if check_line.empty?
-  #     puts finish_confirm_lines = check_line.empty?
-  #   end
-  # end
-  
-  # columns.map! do |check_column|
-  #   check_column.compact!
-  #   if check_column.empty?
-  #     puts finish_confirm_columns = check_column.empty?
-  #   end
-  # end
-  
-  
-  
-  # if finish_confirm_lines || finish_confirm_columns
-  #   puts "B I N G O !!!!!"
-  # else
-  #   puts "続けますか？続けるなら 1 を押してください"
-  #   check_continue = gets.chomp.to_i
-  # end
+puts "横確認"
+
+  columns.each do |check_column|
+    check_column.compact!
+    if check_column.empty?
+      puts "B I N G O !!!!!"
+      check_continue = 0
+    end
+      p check_column.size
+  end
   
     puts "続けますか？続けるなら 1 を押してください"
     check_continue = gets.chomp.to_i

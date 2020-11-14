@@ -1,2 +1,3 @@
-p a = ["あ", "い", "う"]
-p a("あ") = "e"
+require './bingo_card'
+
+puts card

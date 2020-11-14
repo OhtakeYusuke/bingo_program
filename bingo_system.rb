@@ -1,10 +1,4 @@
-
-
-already_numbers = []
-
-p select_number = numbers.shift(1)
-p selected_number = select_number.sample.to_s.rjust(2)
-already_numbers << selected_number
-puts "いままで出た数字<<<#{already_numbers}"
-puts "#{already_numbers.size}回目の挑戦"
-puts "~~~~~~~~~~~~~~~~~~~~~~~"
+# 重複確認
+array = ["52", "74", "62", "37", "20", "27", "17", "25", "51", "68", "59", "72", "44", "50", "14", "11", "73", "36", "58", "45", "41", " 8", "24", "71", "19", "13", "21", " 4", "56", "65", "49", "53", "57", "32", "35", "38", " 9", "69", "31", " 7", "60", "75", "39", "23", " 1", "61", "46", "30", "26", "22", "48", "70"]
+p array.uniq!
+p array.size

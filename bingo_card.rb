@@ -5,6 +5,8 @@ n = (31..45).to_a.shuffle.take(5)
 g = (46..60).to_a.shuffle.take(5)
 o = (61..75).to_a.shuffle.take(5)
 
+bingo = " B| I| N| G| O"
+
 lines = [b, i, n, g, o]
 columns = lines.transpose
 columns[2][2] = nil
@@ -39,41 +41,68 @@ cards = pre_cards.map! do |card|
   card.join("|")
 end
 
+start_message = <<~TEXT
+
+
+
+======================================
+
+      ~~~~~~~~~~~~~~~~~~~~~~~~
+        B I N G O - G A M E
+      ~~~~~~~~~~~~~~~~~~~~~~~~
+    何回目の挑戦で BINGO できるかな？
+
+それではカードをお配りします！
+ゲームを開始するには 1 をおしてください
+中断は コントロールキー と C を押してください
+
+======================================
+TEXT
+
+puts start_message
+puts bingo
 puts cards
-puts "~~~~~~~~~~~~~~~~~"
+
+start_button = 0
+
+print " 1 を入力してください>>> "
+start_button = gets.chomp.to_i
+puts "----------------------------------"
+
+while start_button == 0
+  print "入力が違います。 1 を押してください>>> "
+  start_button = gets.chomp.to_i
+  puts "-----------------------------------"
+end
+
+
+
 
 
 check_continue = 1
 already_numbers = []
-# test
 numbers = (1..75).to_a.shuffle
 
 until check_continue == 0
-  
-  
-
   # 新しいカード作成
   edit_card = cards.map! do |card|
     card.split(/[|]/)
   end
 
-# test
-p select_number = numbers.shift(1)
-p selected_number = select_number.sample.to_s.rjust(2)
-already_numbers << selected_number
-puts "いままで出た数字<<<#{already_numbers}"
-puts "#{already_numbers.size}回目の挑戦"
-puts "~~~~~~~~~~~~~~~~~~~~~~~"
+  select_number = numbers.shift(1)
+  selected_number = select_number.sample.to_s.rjust(2)
+  already_numbers << selected_number
+
+  interval = <<~TEXT
 
 
-# selected_number = [*1..75].sample.to_s.rjust(2)
-#   already_numbers << selected_number
-#   puts "#{selected_number}が出ました"
-#   puts "いままで出た数字<<<#{already_numbers}"
-#   puts "#{already_numbers.size}回目の挑戦"
-#   puts "~~~~~~~~~~~~~~~~~~~~~~~"
+  ~~~#{already_numbers.size}回目の挑戦~~~
+  今回出た数字>>>  #{selected_number}
+  いままで出た数字>>>>  #{already_numbers}
+  ~~~~~~~~~~~~~~~~~~~~~~~
+  TEXT
 
-
+  puts interval
 
   # カードチェック
   edit_card.map do |check_line|
@@ -85,21 +114,18 @@ puts "~~~~~~~~~~~~~~~~~~~~~~~"
       end
     end
   end
-  
+
   # 縦列チェック
   lines = lines.map do |edit_line|
     edit_line.map! do |number|
       if number == selected_number
         number = nil
-        puts "#{selected_number}が当たりました"
       else
         number
       end
     end
   end
-  
-  
-  
+
   # 横列チェック
   columns = columns.map do |edit_columns|
     edit_columns.map! do |number|
@@ -116,35 +142,31 @@ puts "~~~~~~~~~~~~~~~~~~~~~~~"
     card.join("|")
   end
   
+  puts bingo
   puts cards
   
-  
-  
   # BINGO 確認
-
-puts "縦確認"
-
   lines.each do |check_line|
     check_line.compact!
-    p check_line.size
+    if check_line.size == 1
+      puts "縦列リーチです"
+    end
   end
   
-puts "横確認"
-
   columns.each do |check_column|
     check_column.compact!
-    p check_column.size
+    if check_column.size == 1
+      puts "横列リーチです"
+    end
   end
 
   # BINGO 確認メッセージ
   if lines.include?([]) || columns.include?([])
-    puts "B I N G O!!!!"
+    puts "B I N G O!!!!#{already_numbers.size}回目の挑戦でBINGOでした"
     check_continue = 0
   else
     puts "続けますか？続けるなら 1 を押してください"
     check_continue = gets.chomp.to_i
   end
 
-    
-  
 end

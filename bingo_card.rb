@@ -95,7 +95,6 @@ selected_number = [*1..75].sample.to_s.rjust(2)
     edit_columns.map! do |number|
       if number == selected_number
         number = nil
-        puts "#{selected_number}が当たりました"
       else
         number
       end
@@ -117,26 +116,24 @@ puts "縦確認"
 
   lines.each do |check_line|
     check_line.compact!
-    if check_line.empty?
-      puts "B I N G O !!!!!"
-      check_continue = 0
-    else
-      p check_line.size
-    end
+    p check_line.size
   end
   
 puts "横確認"
 
   columns.each do |check_column|
     check_column.compact!
-    if check_column.empty?
-      puts "B I N G O !!!!!"
-      check_continue = 0
-    end
-      p check_column.size
+    p check_column.size
   end
-  
+
+  if lines.include?([]) || columns.include?([])
+    puts "B I N G O!!!!"
+    check_continue = 0
+  else
     puts "続けますか？続けるなら 1 を押してください"
     check_continue = gets.chomp.to_i
+  end
+
+    
   
 end

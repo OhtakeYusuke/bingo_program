@@ -6,11 +6,9 @@ n = (31..45).to_a.shuffle.take(5)
 g = (46..60).to_a.shuffle.take(5)
 o = (61..75).to_a.shuffle.take(5)
 
-# タイトルを作成
-bingo = " B| I| N| G| O"
+
 
 # line 縦列 column 横列（本当は逆にしたかった・・・）
-
 # linesからrowsに修正
 rows = [b, i, n, g, o]
 # column 横列を作成
@@ -29,6 +27,10 @@ end
 cards = pre_cards.map! do |card|
   card.join("|")
 end
+
+
+
+
 
 # 縦と横の中央の穴あけ
 # rows = rows.map do |pre_line|
@@ -64,59 +66,23 @@ lines_array_to_string(columns)
 
 
 
-
-# 表示画面スタート
-start_message = <<~TEXT
-
-
-
-======================================
-
-      ~~~~~~~~~~~~~~~~~~~~~~~~
-        B I N G O - G A M E
-      ~~~~~~~~~~~~~~~~~~~~~~~~
-    何回目の挑戦で BINGO できるかな？
-
-それではカードをお配りします！
-ゲームを開始するには 1 をおしてください
-中断は コントロールキー と C を押してください
-
-======================================
-TEXT
-
-# スタートメッセージ・タイトル・カード表示
-puts start_message
-# puts bingo
-# puts cards
-
-def show_card(bingo,cards)
+# カード表示
+def show_card(bingo,card)
   puts bingo
-  puts cards
+  puts card
 end
-show_card(bingo, cards)
 
 
-# スタートの確認
-start_button = 0
-print " 1 を入力してください>>> "
-start_button = gets.chomp.to_i
-puts "----------------------------------"
 
-# スタートの再確認
-while start_button == 0
-  print "入力が違います。 1 を押してください>>> "
-  start_button = gets.chomp.to_i
-  puts "-----------------------------------"
-end
 
 
 # 繰り返しに入れたくない変数
-check_continue = 1
+
 already_numbers = []
 numbers = (1..75).to_a.shuffle
 
 # ゲーム開始
-until check_continue == 0
+
 
   # # 新しいカードの再作成（文字列から配列）
   # edit_card = cards.map! do |card|
@@ -128,7 +94,7 @@ until check_continue == 0
     return cards
   end
 
-  card_string_to_array(cards)
+
 
 
 
@@ -214,14 +180,13 @@ until check_continue == 0
   #   card.join("|")
   # end
   
+
   # カード再編成をメソッド化
   def cards_array_to_string(edit_card)
-    cards = edit_card.map! do |card|
+    return cards = edit_card.map! do |card|
       card.join("|")
     end
-    return cards
   end
-
   cards_array_to_string(cards)
 
   

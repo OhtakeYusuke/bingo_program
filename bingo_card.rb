@@ -261,21 +261,19 @@ until check_continue == 0
   #   end
   # end
 
-  def check_reach_lines(lines)
+  bool_value = false
+  def check_reach_lines(lines,bool_value)
     lines.each do |check_line|
       check_line.compact!
       if check_line.size == 1
-        puts "横列リーチです"
-        # elseはテスト用
-      else
-        puts check_line.size
+        bool_value = true
       end
     end
+    puts "リーチです"  if bool_value
   end
 
-  check_reach_lines(rows)
-  check_reach_lines(columns)
-
+  check_reach_lines(rows, bool_value)
+  check_reach_lines(columns, bool_value)
 
   ## BINGO したときの確認メッセージとゲームの続行確認メッセージ
   if rows.include?([]) || columns.include?([])
@@ -290,12 +288,11 @@ until check_continue == 0
 
   # def bingo_or_continue(rows, columns, already_numbers)
   #     if rows.include?([]) || columns.include?([])
-  #       puts "B I N G O!!!!#{already_numbers.size}回目の挑戦でBINGOでした"
-  #       check_continue = 0
-  #       return check_continue
+  #       puts "B I N G O!!!!#{already_numbers.size}回目の挑戦でBINGOでした。終了する時は ０ を押してください"
+  #       return check_continue = gets.chomp.to_i
   #     else
   #       puts "続けますか？続けるなら 1 を押してください"
-  #       check_continue = gets.chomp.to_i
+  #       return check_continue = gets.chomp.to_i
   #     end
   # end
 

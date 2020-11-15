@@ -1,1 +1,2 @@
+require "bingo_card"
 

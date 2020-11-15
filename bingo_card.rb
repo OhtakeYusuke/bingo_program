@@ -25,10 +25,12 @@ pre_cards = columns.map do |pre_card|
     number.to_s.rjust(2)
   end
 end
+
 # 文字列として連結させてカード表示を作成
 cards = pre_cards.map! do |card|
   card.join("|")
 end
+
 
 # 縦と横の中央の穴あけ
 # rows = rows.map do |pre_line|
@@ -89,10 +91,11 @@ puts start_message
 # puts bingo
 # puts cards
 
-def show_card(bingo,cards)
+def show_card(bingo,card)
   puts bingo
-  puts cards
+  puts card
 end
+
 show_card(bingo, cards)
 
 

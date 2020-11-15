@@ -8,9 +8,6 @@ o = (61..75).to_a.shuffle.take(5)
 
 # タイトルを作成
 bingo = " B| I| N| G| O"
-
-# line 縦列 column 横列（本当は逆にしたかった・・・）
-
 # linesからrowsに修正
 rows = [b, i, n, g, o]
 # column 横列を作成
@@ -49,7 +46,7 @@ end
 # # チェック用の穴あけ
 # columns[2][2] = nil
 
-# メソッドに修正
+# 上記をメソッドに修正
 def lines_array_to_string(lines)
   lines.map! do |pre_line|
     pre_line.map do |number|
@@ -63,9 +60,6 @@ end
 
 lines_array_to_string(rows)
 lines_array_to_string(columns)
-
-
-
 
 # 表示画面スタート
 start_message = <<~TEXT
@@ -91,6 +85,7 @@ puts start_message
 # puts bingo
 # puts cards
 
+# 上記をメソッドに修正
 def show_card(bingo,card)
   puts bingo
   puts card
@@ -112,7 +107,6 @@ while start_button == 0
   puts "-----------------------------------"
 end
 
-
 # 繰り返しに入れたくない変数
 check_continue = 1
 already_numbers = []
@@ -126,6 +120,7 @@ until check_continue == 0
   #   card.split(/[|]/)
   # end
 
+  # 上記をメソッドに修正
   def card_string_to_array(cards)
     cards.map! { |card| card.split(/[|]/)}
     return cards
@@ -158,17 +153,33 @@ until check_continue == 0
 
 
 
-  # 抽選番号とカード内の番号の照合と一致した番号の空欄
-  cards.map do |check_line|
-    check_line.map! do |number|
-      if number == selected_number
-        number = "  "
-        # else文を書かないとうまくできなかったので一応書く
-      else
-        number
+  # # 抽選番号とカード内の番号の照合と一致した番号の空欄
+  # cards.map do |check_line|
+  #   check_line.map! do |number|
+  #     if number == selected_number
+  #       number = "  "
+  #       # else文を書かないとうまくできなかったので一応書く
+  #     else
+  #       number
+  #     end
+  #   end
+  # end
+
+  # 上記の内容をメソッド化
+  def check_card_number(cards,select_number)
+    cards.map do |check_line|
+      check_line.map! do |number|
+        if number == select_number
+          number = "  "
+        else
+          number
+        end
       end
     end
+    return cards
   end
+
+  check_card_number(cards,selected_number)
 
 
   # # ビンゴ時の縦列チェック
@@ -193,7 +204,7 @@ until check_continue == 0
   #   end
   # end
 
-  # ビンゴ時の各列のチェックをメソッド化
+  # 上記の内容をメソッド化
   def check_lines_number(lines, select_number)
     lines.map! do |edit_lines|
       edit_lines.map! do |number|
@@ -217,7 +228,7 @@ until check_continue == 0
   #   card.join("|")
   # end
   
-  # カード再編成をメソッド化
+  # 上記の内容をメソッド化
   def cards_array_to_string(edit_card)
     cards = edit_card.map! do |card|
       card.join("|")

@@ -10,12 +10,14 @@ o = (61..75).to_a.shuffle.take(5)
 bingo = " B| I| N| G| O"
 
 # line 縦列 column 横列（本当は逆にしたかった・・・）
-lines = [b, i, n, g, o]
+
+# linesからrowsに修正
+rows = [b, i, n, g, o]
 # column 横列を作成
-columns = lines.transpose
+columns = rows.transpose
 # 表示するカードでビンゴ中央の穴を作成
 columns[2][2] = nil
-lines[2][2] = nil
+rows[2][2] = nil
 
 # 縦列が整列するように右に揃える
 pre_cards = columns.map do |pre_card|
@@ -29,22 +31,36 @@ cards = pre_cards.map! do |card|
 end
 
 # 縦と横の中央の穴あけ
-lines = lines.map do |pre_line|
-  pre_line.map do |number|
-    number.to_s.rjust(2)
-  end
-end
-# チェック用の穴あけ
-lines[2][2] = nil
+# rows = rows.map do |pre_line|
+#   pre_line.map do |number|
+#     number.to_s.rjust(2)
+#   end
+# end
+# # チェック用の穴あけ
+# rows[2][2] = nil
 
-columns = columns.map do |pre_column|
-  pre_column.map do |number|
-    number.to_s.rjust(2)
-  end
-end
-# チェック用の穴あけ
-columns[2][2] = nil
+# columns = columns.map do |pre_column|
+#   pre_column.map do |number|
+#     number.to_s.rjust(2)
+#   end
+# end
+# # チェック用の穴あけ
+# columns[2][2] = nil
 
+# メソッドに修正
+def lines_array_to_string(lines)
+  lines.map! do |pre_line|
+    pre_line.map do |number|
+      number.to_s.rjust(2)
+    end
+  end
+  lines[2][2] = nil
+  
+  return lines
+end
+
+lines_array_to_string(rows)
+lines_array_to_string(columns)
 
 
 
@@ -70,8 +86,15 @@ TEXT
 
 # スタートメッセージ・タイトル・カード表示
 puts start_message
-puts bingo
-puts cards
+# puts bingo
+# puts cards
+
+def show_card(bingo,cards)
+  puts bingo
+  puts cards
+end
+show_card(bingo, cards)
+
 
 # スタートの確認
 start_button = 0
@@ -95,10 +118,19 @@ numbers = (1..75).to_a.shuffle
 # ゲーム開始
 until check_continue == 0
 
-  # 新しいカードの再作成（文字列から配列）
-  edit_card = cards.map! do |card|
-    card.split(/[|]/)
+  # # 新しいカードの再作成（文字列から配列）
+  # edit_card = cards.map! do |card|
+  #   card.split(/[|]/)
+  # end
+
+  def card_string_to_array(cards)
+    cards.map! { |card| card.split(/[|]/)}
+    return cards
   end
+
+  card_string_to_array(cards)
+
+
 
   # 抽選番号の取り出し
   select_number = numbers.shift(1)
@@ -124,7 +156,7 @@ until check_continue == 0
 
 
   # 抽選番号とカード内の番号の照合と一致した番号の空欄
-  edit_card.map do |check_line|
+  cards.map do |check_line|
     check_line.map! do |number|
       if number == selected_number
         number = "  "
@@ -136,61 +168,123 @@ until check_continue == 0
   end
 
 
-  # ビンゴ時の縦列チェック
-  lines = lines.map do |edit_line|
-    edit_line.map! do |number|
-      if number == selected_number
-        number = nil
-      else
-        number
+  # # ビンゴ時の縦列チェック
+  # rows = rows.map do |edit_line|
+  #   edit_line.map! do |number|
+  #     if number == selected_number
+  #       number = nil
+  #     else
+  #       number
+  #     end
+  #   end
+  # end
+
+  # # ビンゴ時の横列チェック
+  # columns = columns.map do |edit_columns|
+  #   edit_columns.map! do |number|
+  #     if number == selected_number
+  #       number = nil
+  #     else
+  #       number
+  #     end
+  #   end
+  # end
+
+  # ビンゴ時の各列のチェックをメソッド化
+  def check_lines_number(lines, select_number)
+    lines.map! do |edit_lines|
+      edit_lines.map! do |number|
+        if number == select_number
+          number = nil
+        else
+          number
+        end
       end
     end
+    return lines
   end
 
-  # ビンゴ時の横列チェック
-  columns = columns.map do |edit_columns|
-    edit_columns.map! do |number|
-      if number == selected_number
-        number = nil
-      else
-        number
-      end
-    end
-  end
+  check_lines_number(rows,selected_number)
+  check_lines_number(columns,selected_number)
+
   
 
   # カードの再編成（配列から文字列）
-  cards = edit_card.map! do |card|
-    card.join("|")
+  # cards = edit_card.map! do |card|
+  #   card.join("|")
+  # end
+  
+  # カード再編成をメソッド化
+  def cards_array_to_string(edit_card)
+    cards = edit_card.map! do |card|
+      card.join("|")
+    end
+    return cards
   end
+
+  cards_array_to_string(cards)
+
   
   # 照合を終えた後のカードとタイトル表示
-  puts bingo
-  puts cards
+  show_card(bingo, cards)
   
-  # 縦列のリーチ確認
-  lines.each do |check_line|
-    check_line.compact!
-    if check_line.size == 1
-      puts "縦列リーチです"
-    end
-  end
+  # # 縦列のリーチ確認
+  # rows.each do |check_line|
+  #   check_line.compact!
+  #   if check_line.size == 1
+  #     puts "縦列リーチです"
+  #     #テスト用
+  #   else
+  #     puts check_line.size
+  #   end
+  # end
   
-  # 横列のリーチ確認
-  columns.each do |check_column|
-    check_column.compact!
-    if check_column.size == 1
-      puts "横列リーチです"
+  # # 横列のリーチ確認
+  # columns.each do |check_column|
+  #   check_column.compact!
+  #   if check_column.size == 1
+  #     puts "横列リーチです"
+  #   end
+  # end
+
+  def check_reach_lines(lines)
+    lines.each do |check_line|
+      check_line.compact!
+      if check_line.size == 1
+        puts "横列リーチです"
+        # elseはテスト用
+      else
+        puts check_line.size
+      end
     end
   end
 
-  # BINGO したときの確認メッセージとゲームの続行確認メッセージ
-  if lines.include?([]) || columns.include?([])
+  check_reach_lines(rows)
+  check_reach_lines(columns)
+
+
+  ## BINGO したときの確認メッセージとゲームの続行確認メッセージ
+  if rows.include?([]) || columns.include?([])
     puts "B I N G O!!!!#{already_numbers.size}回目の挑戦でBINGOでした"
     check_continue = 0
   else
     puts "続けますか？続けるなら 1 を押してください"
     check_continue = gets.chomp.to_i
   end
+
+  # 下記のメソッドでBINGOすると繰り返し処理が止まらなくなるのでコメントアウト
+
+  # def bingo_or_continue(rows, columns, already_numbers)
+  #     if rows.include?([]) || columns.include?([])
+  #       puts "B I N G O!!!!#{already_numbers.size}回目の挑戦でBINGOでした"
+  #       check_continue = 0
+  #       return check_continue
+  #     else
+  #       puts "続けますか？続けるなら 1 を押してください"
+  #       check_continue = gets.chomp.to_i
+  #     end
+  # end
+
+  # bingo_or_continue(rows, columns, already_numbers)
 
 end

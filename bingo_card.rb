@@ -125,7 +125,7 @@ until check_continue == 0
     cards.map! { |card| card.split(/[|]/)}
     return cards
   end
-
+  
   card_string_to_array(cards)
 
 
@@ -169,6 +169,7 @@ until check_continue == 0
   def check_card_number(cards,select_number)
     cards.map do |check_line|
       check_line.map! do |number|
+        p number
         if number == select_number
           number = "  "
         else

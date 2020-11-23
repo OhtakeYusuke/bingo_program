@@ -1,2 +1,2 @@
-require "./bingo_card"
+require "./bingo_system"
 # 
